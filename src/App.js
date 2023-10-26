@@ -1,25 +1,35 @@
-import logo from './logo.svg';
-import './App.css';
+import { Suspense, lazy, useEffect } from 'react'
+import { Route, Routes, useNavigate, useLocation } from 'react-router-dom'
+import Layout from './components/Layout'
+import tabs from './tabs.json'
 
 function App() {
+  const navigate = useNavigate()
+  const { pathname } = useLocation()
+
+  useEffect(() => {
+    if (pathname === '/') {
+      navigate(`/${tabs[0].id}`)
+    }
+  }, [pathname, navigate])
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <Routes>
+      <Route path='/' element={<Layout />}>
+        {tabs.map(e => {
+          const TabComponent = lazy(() => import(`./${e.path}`))
+
+          return (
+            <Route key={e.id} path={`/${e.id}`} element={
+              <Suspense fallback={<div>Loading...</div>}>
+                <TabComponent />
+              </Suspense>
+            } />
+          )
+        })}
+      </Route>
+    </Routes>
+  )
 }
 
-export default App;
+export default App
