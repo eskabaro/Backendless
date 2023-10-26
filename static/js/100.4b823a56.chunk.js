@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkcms_app=self.webpackChunkcms_app||[]).push([[100],{31100:function(c,s,p){c.exports=p.p+"static/media/logo.6ce24c58023cc2f8fd88.svg"}}]);
